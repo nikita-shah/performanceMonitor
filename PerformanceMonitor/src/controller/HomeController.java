@@ -28,7 +28,8 @@ public class HomeController {
 
 	public HomeController()
 	{
-		HomeController.setDll();
+	    if(!isDllLocationSet)
+		setDll();
 		processController =  new ProcessController();
 	}
 	
@@ -39,7 +40,6 @@ public class HomeController {
 		ModelAndView model = new ModelAndView("HelloPage");
 		model.addObject("msg","List of processes currently running");
 		model.addObject("list", processController.getList());
-		System.out.println("/welcome success");
 		return model;
 	}
 
@@ -48,8 +48,7 @@ public class HomeController {
 	@ResponseBody
 	@RequestMapping("/allProcesses")
 	public List getProcessInfoList() {	
-		/*if(!isDllLocationSet)
-			setDll();*/
+	
 		processController.getProcessInfoList();
 		return processController.getList();
 	}
@@ -60,7 +59,7 @@ public class HomeController {
 	{
 		try
 		{
-			String path = "C:/softwares/SIGAR API/hyperic-sigar-1.6.4/hyperic-sigar-1.6.4/sigar-bin/lib";
+			String path = "C:/softwares/SIGAR_API/hyperic-sigar-1.6.4/hyperic-sigar-1.6.4/sigar-bin/lib";
 
 			System.setProperty("java.library.path", System.getProperty("java.library.path")+File.pathSeparator+path);
 

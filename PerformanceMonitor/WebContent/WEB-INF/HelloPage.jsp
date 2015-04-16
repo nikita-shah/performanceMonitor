@@ -21,12 +21,12 @@
 <input type="submit" value="Get Usage">
 </form:form>
 
-<!--  
+ 
 <ul>
 			<c:forEach var="listValue" items="${list}">
 				<li>${listValue}</li>
 			</c:forEach>
 		</ul>
--->		
+		
 </body>
 </html>

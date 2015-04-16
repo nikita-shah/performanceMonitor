@@ -15,7 +15,11 @@ package controller;
  * limitations under the License.
  */
 
+import model.ProcessInfo;
+
 import org.hyperic.sigar.cmd.*;
+import org.hyperic.sigar.ptql.ProcessFinder;
+import org.hyperic.sigar.ProcCpu;
 import org.hyperic.sigar.Sigar;
 import org.hyperic.sigar.SigarProxy;
 import org.hyperic.sigar.SigarException;
@@ -176,17 +180,9 @@ public class Ps extends SigarCommandBase {
 
         return new SimpleDateFormat(fmt).format(new Date(time));
     }
-	public static void setLibraryPath(String path) throws Exception {
-		System.setProperty("java.library.path", System.getProperty("java.library.path")+File.pathSeparator+path);
 
-		//set sys_paths to null
-		final Field sysPathsField = ClassLoader.class.getDeclaredField("sys_paths");
-		sysPathsField.setAccessible(true);
-		sysPathsField.set(null, null);
-	}
     public static void main(String[] args) throws Exception {
-    	String dllLocation = "C:/Users/Nika/Desktop/HP Workspace/hyperic-sigar-1.6.4/sigar-bin/lib";
-    	setLibraryPath(dllLocation);
+    
     	new Ps().processCommand(args);
        
     }
@@ -195,11 +191,14 @@ public class Ps extends SigarCommandBase {
 		try{
 		  long[] pids;
 		  pids = this.proxy.getProcList();
+		 
+		  
 		  for (int i=0; i<pids.length; i++) {
 	            long pid = pids[i];
 	            
 
 	            ProcState state = sigar.getProcState(pid);
+	            
 	            ProcTime time = null;
 	            String unknown = "???";
 
@@ -218,6 +217,23 @@ public class Ps extends SigarCommandBase {
 		}
 		  return info;
 	}
+	public ProcessInfo getProcessUsage(String processNameFromUser)
+	{
+		ProcessInfo processInfo = null;
+	    try{		    
+	    	long pids[]=ProcessFinder.find(sigar,"Exe.Name.ct="+processNameFromUser);
+	    	ProcCpu cpu = sigar.getMultiProcCpu("Exe.Name.ct="+processNameFromUser);
+		    ProcMem mem=sigar.getMultiProcMem("Exe.Name.ct="+processNameFromUser);            
+		    processInfo = new ProcessInfo(processNameFromUser, pids, cpu, mem);
+	    }
+	    catch(Exception e)
+	    {
+	    	System.out.println("Exception thrown"+e.getMessage());
+	    }
+		return processInfo;
+	}
+	
+	
 }
 
             

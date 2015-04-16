@@ -17,8 +17,9 @@ import service.ProcessInfoService;
 @Controller
 public class ProcessController {
 
-
+Ps ps ;
 	public ProcessController() {
+		ps=new Ps();
 		// TODO Auto-generated constructor stub
 	}
 
@@ -33,10 +34,16 @@ public class ProcessController {
 	  @RequestMapping(value="/showProcessUsage" ,method=RequestMethod.POST)
 		public ModelAndView getASingleProcessUsage(@RequestParam("processName")String processName)
 		{
+		  //see the concept of model attribute 
+		  //and upgrade this method code to model attribute.
+		 ProcessInfo processInfo ;
+		 processInfo=ps.getProcessUsage(processName);
 		 System.out.println("the received process name is :"+processName);
 		 ModelAndView model =  new ModelAndView("ProcessInfo");
 		 model.addObject("processName",processName);
-		return model;
+		 model.addObject("cpuPercentage", processInfo.getCpu().getPercent());
+		 model.addObject("memorySize", processInfo.getMem().getSize());
+		 return model;
 		}
 
 	public ArrayList<ProcessInfo> getProcessInfoList() {		
@@ -64,10 +71,7 @@ public class ProcessController {
 
 	public  ArrayList<String> getList()
 	{
-		Ps p = new Ps();
-
-		return p.getProcessesName();
-
+	return ps.getProcessesName();
 	}
 
 
