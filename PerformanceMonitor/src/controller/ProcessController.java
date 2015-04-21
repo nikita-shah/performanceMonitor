@@ -6,21 +6,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import model.ProcessInfo;
+import model.DBProcessInfo;
+import model.SystemProcessInfo;
 import service.ProcessInfoService;
 
 @Controller
 public class ProcessController {
-
-Ps ps ;
+	ProcessInfoService processInfoService;
+	
 	public ProcessController() {
-		ps=new Ps();
-		// TODO Auto-generated constructor stub
+	
+		processInfoService = new ProcessInfoService();
+
 	}
 
 	/*public static ArrayList<String> getList()
@@ -31,47 +35,63 @@ Ps ps ;
 		demoList.add("WELCOME");
 		return demoList;
 	}*/
-	  @RequestMapping(value="/showProcessUsage" ,method=RequestMethod.POST)
-		public ModelAndView getASingleProcessUsage(@RequestParam("processName")String processName)
-		{
-		  //see the concept of model attribute 
-		  //and upgrade this method code to model attribute.
-		 ProcessInfo processInfo ;
-		 processInfo=ps.getProcessUsage(processName);
-		 System.out.println("the received process name is :"+processName);
-		 ModelAndView model =  new ModelAndView("ProcessInfo");
-		 model.addObject("processName",processName);
-		 model.addObject("cpuPercentage", processInfo.getCpu().getPercent());
-		 model.addObject("memorySize", processInfo.getMem().getSize());
-		 return model;
+	@RequestMapping(value="/showProcessUsage" ,method=RequestMethod.POST)
+	public ModelAndView getASingleProcessUsage(@RequestParam("processName")String processName)
+	{
+		//see the concept of model attribute 
+		//and upgrade this method code to model attribute.
+		SystemProcessInfo processInfo ;
+		processInfo = processInfoService.getASingleProcessUsage(processName);
+		System.out.println("the received process name is :"+processName);
+		ModelAndView model =  new ModelAndView("ProcessInfo");
+		model.addObject("processName",processName);
+		model.addObject("cpuPercentage", processInfo.getCpu().getPercent());
+		model.addObject("memorySize", processInfo.getMem().getSize());
+		return model;
+	}
+ 
+	
+	//for json output rest api
+		@ResponseBody
+		@RequestMapping("/getEntireDB")
+		public ArrayList<DBProcessInfo> getProcessInfoListJSON() {	
+			return retrieveAllFromDB();
+			
 		}
 
-	public ArrayList<ProcessInfo> getProcessInfoList() {		
-
-		ArrayList<ProcessInfo>processList =  new  ArrayList<ProcessInfo>();
-		ProcessInfoService processInfoService =  new ProcessInfoService();
-		for(String name :getList())
-		{
-			processList.add(new ProcessInfo(name));
+		@ResponseBody
+		@RequestMapping("/getOneProcessFromDB/{processName}")
+		public ArrayList<DBProcessInfo> getProcessInfoListJSON
+		(@PathVariable("processName")String processName) {	
+			//sample url for utilising this code :
+			// http://localhost:8080/PerformanceMonitor/getOneProcessFromDB/chrome
+			return processInfoService.retrieveOneProcessInfo(processName);
+			
 		}
+	
+	public ArrayList<DBProcessInfo> retrieveAllFromDB()
+	{
+		return processInfoService.retrieveEntireDB();
+	}
 
-		//System.out.println("before storing in database size of arraylist:"+processList.size());
-		//for(int i = 0;i<processList.size();i++)
+	public  ArrayList<String> getRepeatedProcessList()
+	{
+		//repeated process names also considered 
+		return processInfoService.getAllProcessNames();
+	}
 
-		processInfoService.storeProcessNames(processList);
-		System.out.println("successfully stored in the database");
-		return processList;
-		/*ModelAndView model = new ModelAndView("HelloPage");
-		model.addObject("msg","List of processes currently running");
-        model.addObject("list", ProcessController.getList());
-		return model;		
-		 */			}
-
-
-
+	
 	public  ArrayList<String> getList()
 	{
-	return ps.getProcessesName();
+		return processInfoService.getProcessNames();
+	}
+
+	public ArrayList<SystemProcessInfo> getAllProcessInfo() {
+		return processInfoService.formProcessInfoList(null);
+	}
+
+	public void persistCurrentProcessesInfo() {
+		processInfoService.storeProcessInfoInDB(null);
 	}
 
 
