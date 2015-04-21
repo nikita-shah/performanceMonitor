@@ -18,6 +18,11 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
+import org.jfree.data.general.SeriesException;
+import org.jfree.data.time.Second;
+import org.jfree.data.time.TimeSeries;
+import org.jfree.data.time.TimeSeriesCollection;
+import org.jfree.data.xy.XYDataset;
 import org.jfree.util.Rotation;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -159,12 +164,106 @@ public class ChartTrialController {
 		}
 	}
 	
+	/*
+	 *Time series chart trial
+	 */
+	
+	@RequestMapping(value="/timeSeriesChartDemo",method=RequestMethod.GET)
+	public void drawTimeSeriesChart(HttpServletResponse response,HttpServletRequest request)
+	{
+		try
+		{
+			final TimeSeries series = new TimeSeries( "Random Data" );			
+			Second current = new Second();
+			double value = 100.0;
+			
+			for ( int i = 0 ; i < 4000 ; i++ )
+		    {
+		       try
+		       {
+		          value = value + Math.random( ) - 0.5;
+		          series.add( current , new Double( value ) );
+		          current = ( Second ) current.next( );
+		       }
+		       catch ( SeriesException e ) 
+		       {
+		          System.err.println( "Error adding to series" );
+		       }
+		    }
+			final XYDataset dataset=( XYDataset )new TimeSeriesCollection(series);		
+			JFreeChart timechart = ChartFactory.createTimeSeriesChart(
+				       "Computing Test", 
+				       "Seconds", 
+				       "Value", 
+				       dataset,
+				       false, 
+				       false, 
+				       false);
+		    int  width= 640; /* Width of the image */
+		    int  height= 480; /* Height of the image */ 
+			response.setContentType("image/png");
+			OutputStream out=response.getOutputStream();
+			ChartUtilities.writeChartAsPNG(out,timechart,width,height);
+			response.getOutputStream().close();
+		}
+
+		catch(Exception e)
+		{
+			System.out.println(e.getLocalizedMessage());
+		}
+	}
+	
+
+	@RequestMapping(value="/timeSeriesChartDemo1",method=RequestMethod.GET)
+	public void drawTimeSeriesChart1(HttpServletResponse response,HttpServletRequest request)
+	{
+		try
+		{
+			final TimeSeries memSeries = new TimeSeries( "memory Usage" );			
+			Second current = new Second();
+			int value=2;
+			for ( int i = 0 ; i < 4 ; i++ )
+		    {
+		       try
+		       {
+		          value *=2 ;
+		          memSeries.add( current , value );
+		          current = ( Second ) current.next( );
+		       }
+		       catch ( SeriesException e ) 
+		       {
+		          System.err.println( "Error adding to series" );
+		       }
+		    }
+			final XYDataset dataset=( XYDataset )new TimeSeriesCollection(memSeries);		
+			JFreeChart timechart = ChartFactory.createTimeSeriesChart(
+				       "Memory Usage", 
+				       "Seconds", 
+				       "Usage", 
+				       dataset,
+				       false, 
+				       false, 
+				       false);
+		    int  width= 640; /* Width of the image */
+		    int  height= 480; /* Height of the image */ 
+			response.setContentType("image/png");
+			OutputStream out=response.getOutputStream();
+			ChartUtilities.writeChartAsPNG(out,timechart,width,height);
+			response.getOutputStream().close();
+		}
+
+		catch(Exception e)
+		{
+			System.out.println(e.getLocalizedMessage());
+		}
+	}
 	
 	
-	   
+	
+}   
+   
 
     
 
 	
-	
-}
+

@@ -15,7 +15,7 @@
 	<!-- call some controller method to display an image -->
 	</br>
 	
-	<img src="<c:url value="/charts/lineChartDemo"/>" alt="check check"/>
+	<img src="<c:url value="/charts/timeSeriesChartDemo1"/>" alt="check check"/>
 	
 </body>
 </html>
