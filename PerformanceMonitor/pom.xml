@@ -13,6 +13,7 @@
 			<version>3.1.0</version>
 			<scope>provided</scope>
 		</dependency>
+		<!-- rest jars jersey used -->
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-server</artifactId>
@@ -24,6 +25,7 @@
 			<version>1.8</version>
 		</dependency>
 
+		<!-- GSON liabrary jars for JSON -->
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
@@ -33,12 +35,14 @@
 			<groupId>org.fusesource</groupId>
 			<artifactId>sigar</artifactId>
 			<version>1.6.4</version>
-
 		</dependency>
+
+		<!-- LOG4J jars -->
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.15</version>
+			<!-- these were giving errors and were not required so excluded them -->
 			<exclusions>
 				<exclusion>
 					<groupId>com.sun.jmx</groupId>
@@ -54,6 +58,8 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+
+		<!-- Spring framework jars -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
@@ -64,7 +70,6 @@
 			<artifactId>spring-web</artifactId>
 			<version>3.0.5.RELEASE</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
@@ -75,15 +80,26 @@
 			<artifactId>commons-logging</artifactId>
 			<version>1.1.1</version>
 		</dependency>
+
+		<!-- java servelet jar -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
+
+		<!-- mysql jar -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.6</version>
+		</dependency>
+
+		<!-- Jfree Chart latest version jar -->
+		<dependency>
+			<groupId>jfree</groupId>
+			<artifactId>jfreechart</artifactId>
+			<version>1.0.13</version>
 		</dependency>
 
 

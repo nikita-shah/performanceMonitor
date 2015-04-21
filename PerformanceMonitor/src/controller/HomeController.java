@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import model.ProcessInfo;
+import model.SystemProcessInfo;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,18 +39,19 @@ public class HomeController {
 	public ModelAndView helloWorld() {
 		ModelAndView model = new ModelAndView("HelloPage");
 		model.addObject("msg","List of processes currently running");
-		model.addObject("list", processController.getList());
+		model.addObject("list", processController.getRepeatedProcessList());
+	    processController.persistCurrentProcessesInfo();
 		return model;
 	}
 
   
 
+	//for json output rest api
 	@ResponseBody
 	@RequestMapping("/allProcesses")
-	public List getProcessInfoList() {	
-	
-		processController.getProcessInfoList();
-		return processController.getList();
+	public ArrayList<SystemProcessInfo> getProcessInfoListJSON() {	
+		return processController.getAllProcessInfo();
+		
 	}
 
 

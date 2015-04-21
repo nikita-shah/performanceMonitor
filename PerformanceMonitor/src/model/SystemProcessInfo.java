@@ -3,27 +3,34 @@ package model;
 import org.hyperic.sigar.ProcCpu;
 import org.hyperic.sigar.ProcMem;
 
-public class ProcessInfo {
+public class SystemProcessInfo {
 String name;
 long pid[];
 ProcCpu cpu;
 ProcMem mem;
 
-public ProcessInfo()
+public SystemProcessInfo()
 {
 
 }
 
-public ProcessInfo(String name)
+public SystemProcessInfo(String name)
 {
 	this.name = name;
     pid=null;
     cpu=null;
     mem=null;    		
 }
+public SystemProcessInfo(String name,long[]pid)
+{
+	this.name = name;
+    this.pid=pid;
+    cpu=null;
+    mem=null;    		
+}
 
 
-public ProcessInfo(String name, long[] pids, ProcCpu cpu, ProcMem mem) {
+public SystemProcessInfo(String name, long[] pids, ProcCpu cpu, ProcMem mem) {
 	super();
 	this.name = name;
 	this.pid = pids;

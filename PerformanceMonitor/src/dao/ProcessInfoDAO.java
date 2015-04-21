@@ -2,16 +2,18 @@ package dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import model.ProcessInfo;
+import model.DBProcessInfo;
+import model.SystemProcessInfo;
 import util.DB;
 
 public class ProcessInfoDAO {
 
 
-	public boolean storeProcessName(ArrayList<ProcessInfo>list)
+	public boolean storeProcessInfo(ArrayList<SystemProcessInfo>list)
 	{
 		try{
 
@@ -22,13 +24,15 @@ public class ProcessInfoDAO {
 			//first field is the id field , it is indicated as null
 			//because we have mentioned it to be auto incremented.
 			
-			String query="insert into process_info values (null,?)";
+			String query="insert into process_info values (null,?,?,?)";
 				    	
 			stmt = con.prepareStatement(query);
 	    	
 	    	for(int i=0;i<list.size();i++)
 	    	{
 	    	stmt.setString(1,list.get(i).getName());
+	    	stmt.setString(2,list.get(i).getCpu().getPercent()+"");
+	    	stmt.setString(3, list.get(i).getMem().getSize()+"");
 	    	
 	    	stmt.executeUpdate();
 	    	}
@@ -42,5 +46,62 @@ public class ProcessInfoDAO {
 		}
 
 	}
+	
+	
+	public ArrayList<DBProcessInfo> retrieveAllFromDatabase()
+	{
+		ArrayList<DBProcessInfo> list = new ArrayList<DBProcessInfo>();
+		DBProcessInfo processInfo;
+	    Statement stmt=null;
+		Connection con=DB.getConnection();		
+		ResultSet rs;
+		String query="select * from process_info";			    	
+		try
+		{
+		 stmt=con.createStatement();	
+		  rs=stmt.executeQuery(query);	
+		  while(rs.next())
+		  {			  
+			 processInfo = new DBProcessInfo(rs.getString(2),rs.getString(3),rs.getString(4));
+			 list.add(processInfo);			 
+		  }
+		}
+		catch(Exception e )
+		{
+			System.out.println("Exception in retrieving from database"+e.getLocalizedMessage());
+			
+		}
+		return list;
+		
+	}
 
+	
+	public ArrayList<DBProcessInfo> retrieveOneProcessInfo(String processName)
+	{
+		ArrayList<DBProcessInfo> list = new ArrayList<DBProcessInfo>();
+		DBProcessInfo processInfo;
+	    Statement stmt=null;
+		Connection con=DB.getConnection();		
+		ResultSet rs;
+		String query="select * from process_info where process_name like '%"+processName+"%'";			    	
+		try
+		{
+		 stmt=con.createStatement();	
+		  rs=stmt.executeQuery(query);	
+		  while(rs.next())
+		  {			  
+			  processInfo = new DBProcessInfo(rs.getString(2),rs.getString(3),rs.getString(4));
+			  list.add(processInfo);	  
+		  }
+		}
+		catch(Exception e )
+		{
+			System.out.println("Exception in retrieving from database"+e.getLocalizedMessage());
+			
+		}
+		return list;
+		
+	}
+
+	
 }
