@@ -30,7 +30,10 @@ public void storeProcessInfoInDB(ArrayList<SystemProcessInfo>processInfoList)
 	processInfoDAO.storeProcessInfo(processInfoList);
 }
 
-
+public ArrayList<DBProcessInfo> getASingleProcessUsageHistory(String processName)
+{
+	return processInfoDAO.retrieveOneProcessInfo(processName);
+}
 
 public ArrayList<SystemProcessInfo> formProcessInfoList(ArrayList<String> nameList)
 {

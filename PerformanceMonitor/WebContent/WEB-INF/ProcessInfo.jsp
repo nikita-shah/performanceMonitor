@@ -13,9 +13,9 @@
 	<br> memory usage : ${memorySize}
 
 	<!-- call some controller method to display an image -->
-	</br>
-	
+	<br>
 	<img src="<c:url value="/charts/timeSeriesChartDemo1"/>" alt="check check"/>
-	
+	<br>
+	<img src="<c:url value="/charts/memoryUsageChart/${processName}"/>" alt="check check"/>
 </body>
 </html>

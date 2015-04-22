@@ -2,6 +2,7 @@ package controller;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,13 +26,17 @@ import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.util.Rotation;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import model.*;
+
+
 @Controller
 @RequestMapping("/charts")
-public class ChartTrialController {
+public class ChartController {
 	
 	
 	//from the trial jsp after putting the c:url tag ,
@@ -258,7 +263,57 @@ public class ChartTrialController {
 		}
 	}
 	
-	
+	@RequestMapping(value="/memoryUsageChart/{processName}",method=RequestMethod.GET)
+	public void drawTimeSeriesChartMemoryUsage(HttpServletResponse response,@PathVariable("processName")String processName)
+	{
+		ProcessController processController = new ProcessController();
+		
+			System.out.println("In the charting function process name is"+processName);
+			//get values for this process from db
+			//form static chart of the db values.
+			ArrayList<DBProcessInfo> processUsageHistoryList = 
+					processController.getASingleProcessUsageHistory(processName);
+
+			final TimeSeries memSeriesHistory = new TimeSeries( "memory usage history" );			
+			Second current = new Second();
+
+			try
+			{
+				for(int i=0;i<processUsageHistoryList.size();i++)
+				{
+					memSeriesHistory.add( current , Double.parseDouble(processUsageHistoryList.get(i).getMemSize()) );
+					current = ( Second ) current.next( );
+				}
+			
+		    }
+			catch ( SeriesException e ) 
+			{
+				System.err.println( "Error adding to series" );
+			}
+		
+		final XYDataset dataset=( XYDataset )new TimeSeriesCollection(memSeriesHistory);		
+		JFreeChart timechart = ChartFactory.createTimeSeriesChart(
+				"Memory Usage", 
+				"Seconds", 
+				"Usage", 
+				dataset,
+				false, 
+				false, 
+				false);
+		int  width= 640; // Width of the image 
+		int  height= 480; // Height of the image  
+		response.setContentType("image/png");
+		try
+		{
+		OutputStream out=response.getOutputStream();
+		ChartUtilities.writeChartAsPNG(out,timechart,width,height);
+		response.getOutputStream().close();
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.getLocalizedMessage());
+		}
+		}
 	
 }   
    

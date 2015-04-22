@@ -94,6 +94,11 @@ public class ProcessController {
 		processInfoService.storeProcessInfoInDB(null);
 	}
 
+	public ArrayList<DBProcessInfo> getASingleProcessUsageHistory(String processName)
+	{
+	    return processInfoService.getASingleProcessUsageHistory(processName);	
+	}
+
 
 
 }
