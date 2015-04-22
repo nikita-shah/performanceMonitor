@@ -315,6 +315,56 @@ public class ChartController {
 		}
 		}
 	
+	@RequestMapping(value="/memoryUsageChartLive/{processName}",method=RequestMethod.GET)
+	public void drawTimeSeriesChartMemoryUsageLive(HttpServletResponse response,@PathVariable("processName")String processName)
+	{
+		ProcessController processController = new ProcessController();
+			ArrayList<DBProcessInfo> processUsageHistoryList = 
+					processController.getASingleProcessUsageHistory(processName);
+
+			final TimeSeries memSeriesHistory = new TimeSeries( "memory usage history" );			
+			Second current = new Second();
+
+			try
+			{
+				for(int i=0;i<processUsageHistoryList.size();i++)
+				{
+					memSeriesHistory.add( current , Double.parseDouble(processUsageHistoryList.get(i).getMemSize()) );
+					current = ( Second ) current.next( );
+				}
+			
+		    }
+			catch ( SeriesException e ) 
+			{
+				System.err.println( "Error adding to series" );
+			}
+		
+		final XYDataset dataset=( XYDataset )new TimeSeriesCollection(memSeriesHistory);		
+		JFreeChart timechart = ChartFactory.createTimeSeriesChart(
+				"Memory Usage", 
+				"Seconds", 
+				"Usage", 
+				dataset,
+				false, 
+				false, 
+				false);
+		int  width= 640; // Width of the image 
+		int  height= 480; // Height of the image  
+		response.setContentType("image/png");
+		try
+		{
+		OutputStream out=response.getOutputStream();
+		ChartUtilities.writeChartAsPNG(out,timechart,width,height);
+		response.getOutputStream().close();
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.getLocalizedMessage());
+		}
+		}
+	
+	
+	
 }   
    
 

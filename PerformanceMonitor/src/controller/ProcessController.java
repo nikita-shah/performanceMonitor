@@ -49,6 +49,22 @@ public class ProcessController {
 		model.addObject("memorySize", processInfo.getMem().getSize());
 		return model;
 	}
+	
+	@RequestMapping(value="/showProcessUsage" ,method=RequestMethod.GET)
+	public ModelAndView getASingleProcessUsage1()
+	{
+		//see the concept of model attribute 
+		//and upgrade this method code to model attribute.
+		String processName = "chrome";
+		SystemProcessInfo processInfo ;
+		processInfo = processInfoService.getASingleProcessUsage(processName);
+		System.out.println("the received process name is :"+processName);
+		ModelAndView model =  new ModelAndView("ProcessInfo");
+		model.addObject("processName",processName);
+		model.addObject("cpuPercentage", processInfo.getCpu().getPercent());
+		model.addObject("memorySize", processInfo.getMem().getSize());
+		return model;
+	}
  
 	
 	//for json output rest api
