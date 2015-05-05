@@ -6,11 +6,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Usage Information</title>
- <script src='http://cdn.zingchart.com/zingchart.min.js'></script>
-   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src='http://cdn.zingchart.com/zingchart.min.js'></script>
+<script
+	src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 </head>
 <body>
-	
+
 
 	<%-- <!-- call some controller method to display an image -->
 	<!-- something i was trying with the static chart refresh -->
@@ -22,79 +23,99 @@
 	 <%@ include file="ZingFeed.html" %> 
  --%>
 
-    
-<script>
-    var chartData = {
-        "type":"line",
-        "title": {
-            "text": "Resource usage by ${processName}"
-        },
-        "refresh": {
-            "type": "feed",
-            "transport": "js",
-            "url": "feed()",
-            "interval": 1000
-        },
-        "plot": {
-            "valueBox": {
-                "type": "all",
-                "placement": "top"
-            }
-        },
-        "series":[
-            {
-            	
-                "values":[],
-                "text":"1st plot"
-            
-            },
-            {
-            	"values":[],
-            	"text":"2nd plot"
-            }
-        ]
-    };
-   
-   
 
-    window.onload = function() {
-        zingchart.render({
-            id: "chartDiv",
-            data: chartData,
-            height: 600,
-            width: "100%"
-        });
-    };
+	<script>
+		var chartData = {
+			"type" : "line",
+			"title" : {
+				"text" : "Resource usage by ${processName}"
+			},
+			"legend" : {},
+			"refresh" : {
+				"type" : "feed",
+				"transport" : "js",
+				"url" : "feed()",
+				"interval" : 1000
+			},
+			"plot" : {
+				"valueBox" : {
+					"type" : "all",
+					"placement" : "top"
+				}
+			},
+			"series" : [ {
 
-    window.feed = function(callback) {
-        $.ajax({
-            type: "GET",
-            dataType: "json",
-            headers: {
-                Accept: "application/json",
-                "Access-Control-Allow-Origin": "*"
-            },
-            url: "/PerformanceMonitor/showProcessUsage/${processName}",
-            success: function (data) {             
-                var mem = data.mem.size/100000;
-                var tick = {
-                    plot0: parseInt(mem),
-                    plot1: parseInt(data.cpu.percent*100)
-                };
-                callback(JSON.stringify(tick));
-            }
-        });
-    };
-    </script>
-    <div id="processInfo">
+				"values" : [],
+				"text" : "memory usage"
+
+			},
+			{
+				"values" : [],
+				"text" : "page faults"
+			},
+
+			{
+				"values" : [],
+				"text" : "resident memory"
+			},
+			{
+				"values" : [],
+				"text" : "virtual mem size"
+			},
+			{
+				"values" : [],
+				"text" : "cpu percent*100"
+			},
+			{
+				"values" : [],
+				"text" : "number of processes"
+			}
+			 ]
+		};
+
+		window.onload = function() {
+			zingchart.render({
+				id : "chartDiv",
+				data : chartData,
+				height : 600,
+				width : "100%"
+			});
+		};
+
+		window.feed = function(callback) {
+			$.ajax({
+				type : "GET",
+				dataType : "json",
+				headers : {
+					Accept : "application/json",
+					"Access-Control-Allow-Origin" : "*"
+				},
+				url : "/PerformanceMonitor/showProcessUsage/${processName}",
+				success : function(data) {
+					var mem = data.mem.size / 100000;
+					var tick = {
+						plot0 : parseInt(mem),
+						plot1 : parseInt(data.mem.pagefaults),
+						plot2 : parseInt(data.mem.resident/100000),
+						plot3 : parseInt(data.mem.vsize/100000),
+						plot4 : parseInt(data.cpu.percent * 100),
+						plot5 : parseInt(data.cpu.processes)
+										
+					};
+					callback(JSON.stringify(tick));
+				}
+			});
+		};
+	</script>
+	<%--   <div id="processInfo">
     process name : ${processName}
 	<br> cpu percentage : ${cpuPercentage}
-	<br> memory usage : ${memorySize}</div>
+	<br> memory usage : ${memorySize}</div> --%>
 	<br>
 	<br>
 	<br>
-    <div id='chartDiv'></div>
+	<div id='chartDiv'></div>
 
-    
+
 </body>
 </html>
