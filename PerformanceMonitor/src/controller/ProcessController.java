@@ -40,9 +40,9 @@ public class ProcessController {
 	{
 		//see the concept of model attribute 
 		//and upgrade this method code to model attribute.
+		System.out.println(" @RequestMapping(value=/showProcessUsage ,method=RequestMethod.POST) ");
 		SystemProcessInfo processInfo ;
 		processInfo = processInfoService.getASingleProcessUsage(processName);
-		System.out.println("the received process name is :"+processName);
 		ModelAndView model =  new ModelAndView("ProcessInfo");
 		model.addObject("processName",processName);
 		model.addObject("cpuPercentage", processInfo.getCpu().getPercent());
@@ -50,22 +50,33 @@ public class ProcessController {
 		return model;
 	}
 	
+	@ResponseBody
 	@RequestMapping(value="/showProcessUsage" ,method=RequestMethod.GET)
-	public ModelAndView getASingleProcessUsage1()
+	public SystemProcessInfo getASingleProcessUsage1()
 	{
 		//see the concept of model attribute 
 		//and upgrade this method code to model attribute.
+	    System.out.println("@RequestMapping(value=/showProcessUsage ,method=RequestMethod.GET)");
 		String processName = "chrome";
 		SystemProcessInfo processInfo ;
 		processInfo = processInfoService.getASingleProcessUsage(processName);
-		System.out.println("the received process name is :"+processName);
-		ModelAndView model =  new ModelAndView("ProcessInfo");
-		model.addObject("processName",processName);
-		model.addObject("cpuPercentage", processInfo.getCpu().getPercent());
-		model.addObject("memorySize", processInfo.getMem().getSize());
-		return model;
+		return processInfo;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/showProcessUsage/{processName}" ,method=RequestMethod.GET)
+	public SystemProcessInfo getASingleProcessInfo(@PathVariable("processName")String processName)
+	{
+
+		SystemProcessInfo processInfo ;
+		processInfo = processInfoService.getASingleProcessUsage(processName);
+		System.out.println("the received process name mapped by /showProcessUsage/{processName} :"+processName);
+		System.out.println("memory to be plot:"+processInfo.getMem().getSize());
+		return processInfo;
 	}
  
+	
+
 	
 	//for json output rest api
 		@ResponseBody

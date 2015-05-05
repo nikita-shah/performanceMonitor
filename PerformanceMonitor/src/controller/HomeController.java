@@ -44,7 +44,11 @@ public class HomeController {
 		return model;
 	}
 
-  
+	@RequestMapping(value = "/ZingFeed", method = RequestMethod.GET)
+	   public String redirect() {
+	     
+	      return "redirect:static/ZingFeed.html";
+	   }
 
 	//for json output rest api
 	@ResponseBody

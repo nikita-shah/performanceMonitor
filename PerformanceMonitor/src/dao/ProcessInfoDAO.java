@@ -15,11 +15,12 @@ public class ProcessInfoDAO {
 
 	public boolean storeProcessInfo(ArrayList<SystemProcessInfo>list)
 	{
+		PreparedStatement stmt=null;
+		Connection con= null;
+		
 		try{
 
-           
-			PreparedStatement stmt=null;
-			Connection con=DB.getConnection();
+			con=DB.getConnection();
 
 			//first field is the id field , it is indicated as null
 			//because we have mentioned it to be auto incremented.
@@ -36,15 +37,20 @@ public class ProcessInfoDAO {
 	    	
 	    	stmt.executeUpdate();
 	    	}
-			
-			return true;
+	    	con.close();
+			stmt.close();
+		
+	    	return true;
 		}catch(Exception e)
 		{
 			System.out.println(e.getLocalizedMessage());
 			System.out.println(e.getMessage());
+			
+		
 			return false;
 		}
 
+	   
 	}
 	
 	
