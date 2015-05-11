@@ -30,7 +30,36 @@
 			"title" : {
 				"text" : "Resource usage by ${processName}"
 			},
-			"legend" : {},
+			 "chart":{
+		            "marginRight":100
+		        },
+			"legend" : {
+				"draggable":true,
+				 "drag-handler":"icon",
+				    "icon":{
+				        "line-color":"yellow",
+				        "line-width":"3px",
+				        
+				    },
+				    "marker":{
+				        "type":"circle"
+				      }
+			},
+			"scale-x":{
+			      "zooming":true
+			    },
+			    "scale-y":{
+			      "zooming":true
+			    },
+			    "curtain":[
+		                    {
+		                    "text": "the data is loading...",
+		                    "color": "red",
+		                    "text-size": 30,
+		                    "bold": true,
+		                    "alpha": 0.5
+		                }
+		                ],
 			"refresh" : {
 				"type" : "feed",
 				"transport" : "js",
@@ -78,7 +107,8 @@
 				id : "chartDiv",
 				data : chartData,
 				height : 600,
-				width : "100%"
+				width : "100%",
+				//defaultsurl:"./resources/candy.txt"
 			});
 		};
 
@@ -106,6 +136,8 @@
 				}
 			});
 		};
+		
+		
 	</script>
 	<%--   <div id="processInfo">
     process name : ${processName}
@@ -115,7 +147,21 @@
 	<br>
 	<br>
 	<div id='chartDiv'></div>
+	<button style="background-color:lightblue" id="clearFeed" type="button" >Clear Feed</button>
+	<button style="background-color:lightblue" id="startFeed" type="button" >Start Feed</button>
+    <button style="background-color:lightblue" id="stopFeed" type="button" >Stop Feed</button>
 
+<script>
+$("#clearFeed").bind('click', function() {
+	  zingchart.exec("chartDiv", "clearfeed");
+	});
+$("#startFeed").bind('click', function() {
+	  zingchart.exec("chartDiv", "startfeed");
+	});
+$("#stopFeed").bind('click', function() {
+	  zingchart.exec("chartDiv", "stopfeed");
+	});
+</script>
 
 </body>
 </html>
