@@ -47,7 +47,8 @@ public ArrayList<SystemProcessInfo> formProcessInfoList(ArrayList<String> nameLi
 	SystemProcessInfo processInfo;
 	for(int i=0;i<nameList.size();i++)
 	{
-		processInfo = ps.getProcessUsage(nameList.get(i));
+		processInfo = ps.getProcessUsage(nameList.get(i)); 
+		//multi process scenario is well handled in getProcessUsage method. 
         processInfoList.add(processInfo);
 	}
    return processInfoList;
@@ -73,6 +74,24 @@ public ArrayList<String> getProcessNames()
 public ArrayList<String> getAllProcessNames() {
 	
 	return ps.getAllProcessNames();
+}
+
+public ArrayList<DBProcessInfo> getASingleProcessUsageHistoryPastWeek(
+		String processName) {
+	// TODO Auto-generated method stub
+	return processInfoDAO.retrieveOneProcessInfoPastWeek(processName);	
+}
+
+public ArrayList<DBProcessInfo> getASingleProcessUsageHistoryThisMonth(
+		String processName) {
+	// TODO Auto-generated method stub
+	return processInfoDAO.retrieveOneProcessThisMonth(processName);	
+}
+
+public ArrayList<DBProcessInfo> getASingleProcessUsageHistoryThisYear(
+		String processName) {
+	// TODO Auto-generated method stub
+	return processInfoDAO.retrieveOneProcessThisYear(processName);
 }
 
 	

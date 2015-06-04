@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
-import service.ProcessInfoService;
-
 @Controller
 
 public class HomeController {
@@ -64,20 +62,20 @@ public class HomeController {
 	{
 		try
 		{
-			String path = "C:/softwares/SIGAR_API/hyperic-sigar-1.6.4/hyperic-sigar-1.6.4/sigar-bin/lib";
-
-			System.setProperty("java.library.path", System.getProperty("java.library.path")+File.pathSeparator+path);
+			//String path = "C:/softwares/SIGAR_API/hyperic-sigar-1.6.4/hyperic-sigar-1.6.4/sigar-bin/lib";
+            //String path = "/sigarlib" ;
+			//System.setProperty("java.library.path", System.getProperty("java.library.path")+File.pathSeparator+path);
 
 			//set sys_paths to null
-			final Field sysPathsField = ClassLoader.class.getDeclaredField("sys_paths");
-			sysPathsField.setAccessible(true);
-			sysPathsField.set(null, null);
+			//final Field sysPathsField = ClassLoader.class.getDeclaredField("sys_paths");
+			//sysPathsField.setAccessible(true);
+			//sysPathsField.set(null, null);
 
 		}
 		catch(Exception e)
 		{
-			System.out.println(e.getLocalizedMessage());
-			return false;
+			//System.out.println(e.getLocalizedMessage());
+			//return false;
 		}
 		isDllLocationSet = true;
 		return true;

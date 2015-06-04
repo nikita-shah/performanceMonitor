@@ -1,14 +1,18 @@
 package model;
 
+import java.sql.Timestamp;
+
 public class DBProcessInfo {
 String name,cpuPercent,memSize;
+Timestamp lastUpdated;
 
 
-public DBProcessInfo(String name, String cpuPercent, String memSize) {
+public DBProcessInfo(String name, String cpuPercent, String memSize,Timestamp lastUpdated) {
 	super();
 	this.name = name;
 	this.cpuPercent = cpuPercent;
 	this.memSize = memSize;
+	this.lastUpdated = lastUpdated;
 }
 
 /**
@@ -51,6 +55,20 @@ public String getMemSize() {
  */
 public void setMemSize(String memSize) {
 	this.memSize = memSize;
+}
+
+/**
+ * @return the lastUpdated
+ */
+public Timestamp getLastUpdated() {
+	return lastUpdated;
+}
+
+/**
+ * @param lastUpdated the lastUpdated to set
+ */
+public void setLastUpdated(Timestamp lastUpdated) {
+	this.lastUpdated = lastUpdated;
 }
 
 }

@@ -10,5 +10,6 @@
 <body>
 <!-- http://localhost:8080/PerformanceMonitor/ -->
 <c:redirect url="/welcome"/>
+<!-- <c:redirect url="/welcome"/> -->
 </body>
 </html>

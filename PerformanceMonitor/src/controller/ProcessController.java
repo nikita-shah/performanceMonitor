@@ -40,7 +40,7 @@ public class ProcessController {
 	{
 		//see the concept of model attribute 
 		//and upgrade this method code to model attribute.
-		System.out.println(" @RequestMapping(value=/showProcessUsage ,method=RequestMethod.POST) ");
+	//	System.out.println(" @RequestMapping(value=/showProcessUsage ,method=RequestMethod.POST) ");
 		SystemProcessInfo processInfo ;
 		processInfo = processInfoService.getASingleProcessUsage(processName);
 		ModelAndView model =  new ModelAndView("ProcessInfo");
@@ -56,7 +56,7 @@ public class ProcessController {
 	{
 		//see the concept of model attribute 
 		//and upgrade this method code to model attribute.
-	    System.out.println("@RequestMapping(value=/showProcessUsage ,method=RequestMethod.GET)");
+	   // System.out.println("@RequestMapping(value=/showProcessUsage ,method=RequestMethod.GET)");
 		String processName = "chrome";
 		SystemProcessInfo processInfo ;
 		processInfo = processInfoService.getASingleProcessUsage(processName);
@@ -70,8 +70,8 @@ public class ProcessController {
 
 		SystemProcessInfo processInfo ;
 		processInfo = processInfoService.getASingleProcessUsage(processName);
-		System.out.println("the received process name mapped by /showProcessUsage/{processName} :"+processName);
-		System.out.println("memory to be plot:"+processInfo.getMem().getSize());
+		//System.out.println("the received process name mapped by /showProcessUsage/{processName} :"+processName);
+		//System.out.println("memory to be plot:"+processInfo.getMem().getSize());
 		return processInfo;
 	}
  
@@ -124,6 +124,24 @@ public class ProcessController {
 	public ArrayList<DBProcessInfo> getASingleProcessUsageHistory(String processName)
 	{
 	    return processInfoService.getASingleProcessUsageHistory(processName);	
+	}
+
+	public ArrayList<DBProcessInfo> getASingleProcessUsageHistoryPastWeek(
+			String processName) {
+		// TODO Auto-generated method stub
+		 return processInfoService.getASingleProcessUsageHistoryPastWeek(processName);
+			}
+
+	public ArrayList<DBProcessInfo> getASingleProcessUsageHistoryThisMonth(
+			String processName) {
+		// TODO Auto-generated method stub
+		 return processInfoService.getASingleProcessUsageHistoryThisMonth(processName);
+	}
+
+	public ArrayList<DBProcessInfo> getASingleProcessUsageHistoryThisYear(
+			String processName) {
+		// TODO Auto-generated method stub
+		return processInfoService.getASingleProcessUsageHistoryThisYear(processName);
 	}
 
 

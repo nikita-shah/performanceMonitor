@@ -12,6 +12,24 @@
 </head>
 <body>
 
+	<!-- call some controller method to display an image -->
+	
+	<br>
+	entire information
+	<br>
+	<img src="<c:url value="/charts/UsageChart/${processName}"/>" alt="check check"/>
+    this week
+    <br>
+	<img src="<c:url value="/charts/UsageChart/${processName}/week"/>" alt="check check"/>
+	this month
+	<br>
+	<img src="<c:url value="/charts/UsageChart/${processName}/month"/>" alt="check check"/>
+	this year
+	<br>
+	<img src="<c:url value="/charts/UsageChart/${processName}/year"/>" alt="check check"/>
+	<!--  <img src="<c:url value="/charts/memoryUsageChart/${processName}/year"/>" alt="check check"/>-->
+
+
 
 	<%-- <!-- call some controller method to display an image -->
 	<!-- something i was trying with the static chart refresh -->
